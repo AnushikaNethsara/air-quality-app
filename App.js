@@ -11,7 +11,6 @@ import Profile from "./src/mainScreens/Profile";
 
 import BottomNavigator from "./src/navigation/BottomNavigator";
 
-//needed screens
 import OptimalTimeTravel from "./src/mainScreens/OptimalTimeTravel/index";
 import OptimalTimeTravelResult from "./src/mainScreens/OptimalTimeTravel/OptimalTimeTravelResult";
 
@@ -54,12 +53,11 @@ const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
 TaskManager.defineTask(
   BACKGROUND_NOTIFICATION_TASK,
   ({ data, error, executionInfo }) => {
-    console.log("✅ Received a notification in the background!", {
+    console.log("Received a notification in the background!", {
       data,
       error,
       executionInfo,
     });
-    // Do something with the notification data
   }
 );
 
@@ -140,43 +138,3 @@ const App = () => {
 };
 
 export default App;
-
-// import * as Notifications from "expo-notifications";
-// import * as TaskManager from "expo-task-manager";
-// import {
-//   NotificationProvider,
-//   useNotification,
-// } from "./context/NotificationContext";
-// import Home from "./Home";
-
-// Notifications.setNotificationHandler({
-//   handleNotification: async () => ({
-//     shouldShowAlert: true,
-//     shouldPlaySound: false,
-//     shouldSetBadge: false,
-//   }),
-// });
-
-// const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
-
-// TaskManager.defineTask(
-//   BACKGROUND_NOTIFICATION_TASK,
-//   ({ data, error, executionInfo }) => {
-//     console.log("✅ Received a notification in the background!", {
-//       data,
-//       error,
-//       executionInfo,
-//     });
-//     // Do something with the notification data
-//   }
-// );
-
-// Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
-
-// export default function App() {
-//   return (
-//     <NotificationProvider>
-//       <Home />
-//     </NotificationProvider>
-//   );
-// }

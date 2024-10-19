@@ -3,7 +3,6 @@ import { Text, StyleSheet, View, Image, SafeAreaView } from "react-native";
 import COLORS from "../consts/colors";
 import { PrimaryButton } from "./components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNotification } from "../../context/NotificationContext";
 
 const OnBoardScreen = ({ navigation }) => {
   useEffect(() => {
@@ -16,13 +15,6 @@ const OnBoardScreen = ({ navigation }) => {
 
     fetchData();
   }, []);
-
-  // const { expoPushToken, notification, error } = useNotification();
-  // console.log("\n\n===========");
-  // console.log("expoPushToken: ", expoPushToken);
-  // console.log("notification: ", notification);
-  // console.log("error: ", error);
-  // console.log("===========\n\n");
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightGreen }}>
