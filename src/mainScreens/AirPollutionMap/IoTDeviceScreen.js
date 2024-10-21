@@ -13,7 +13,7 @@ import Header from "../components/Header";
 import COLORS from "../../consts/colors";
 import constants from "../../consts/constants";
 import { useIsFocused } from "@react-navigation/native";
-import CityDataCard from "../components/CityDataCard";
+import IoTDataCard from "../components/IoTDataCard";
 import { getCityFromCoordinates } from "../../utils/GetCityFromCoordinates";
 
 const defaultCoordinate = {
@@ -25,24 +25,22 @@ const { width } = Dimensions.get("screen");
 
 const IoTDeviceHistroyScreen = ({ route, navigation }) => {
   const isFocus = useIsFocused();
-  const { mapData } = route.params;
-  const [city, setCity] = useState(false);
+  const { iotId } = route.params;
+  // const [idOfIot, setIdOfIot] = useState(iotId);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCityData, setSelectedCityData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const locationName = await getCityFromCoordinates(
-        mapData.coordinate.latitude,
-        mapData.coordinate.longitude
+
+      console.log(
+        "selectedCityData: ",
+        constants.backend_url + "/levels/a-iot-history/" + iotId
       );
-
-      setCity(locationName);
-
       try {
         const response = await axios.get(
-          constants.backend_url + "/levels/a-city-history/" + locationName
+          constants.backend_url + "/levels/a-iot-history/" + iotId
         );
         let data = response.data;
         if (data.length > 500) {
@@ -82,9 +80,9 @@ const IoTDeviceHistroyScreen = ({ route, navigation }) => {
                   color: COLORS.darkGreen,
                 }}
               >
-                City: {city}
+                IoT ID: {iotId}
               </Text>
-              <CityDataCard selectedCityData={selectedCityData} />
+              <IoTDataCard selectedCityData={selectedCityData} />
             </>
           )}
         </View>

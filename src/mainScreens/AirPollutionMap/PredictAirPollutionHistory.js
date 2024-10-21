@@ -10,7 +10,7 @@ import {
   Picker,
   Platform,
   Button,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import Icon from "@expo/vector-icons/AntDesign";
 import COLORS from "../../consts/colors";
@@ -19,29 +19,30 @@ import axios from "axios";
 import TextInputWithLabel from "../components/TextInputWithLabel";
 import Header from "../components/Header";
 import SubmitButton from "../components/SubmitButton";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import AirPollutionHistoryCard from "../components/AirPollutionHistoryCard";
 
 const { width } = Dimensions.get("screen");
 
-
 const PredictAirPollutionHistory = ({ navigation }) => {
-
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-
   const handleShowHistory = async () => {
     // navigation.navigate("OptimalTimeTravelResult");
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const getUserId = await AsyncStorage.getItem("userId");
         const userId = JSON.parse(getUserId);
-        const response = await axios.get(constants.backend_url + "/prediction/air-pollution-predictions/" + userId);
+        const response = await axios.get(
+          constants.backend_url +
+            "/prediction/air-pollution-predictions/" +
+            userId
+        );
         console.log(response.data);
 
         setResult(response.data);
@@ -53,9 +54,6 @@ const PredictAirPollutionHistory = ({ navigation }) => {
 
     fetchData();
   }, []);
-
-
-
 
   return (
     <View style={{ backgroundColor: COLORS.backgroundColor, height: "100%" }}>
@@ -87,7 +85,6 @@ const PredictAirPollutionHistory = ({ navigation }) => {
           secureTextEntry={false}
         />
         <SubmitButton onSubmit={() => { handleSubmit() }} title={"Check"} isLoading={isLoading} /> */}
-
       </ScrollView>
     </View>
   );
@@ -97,9 +94,9 @@ export default PredictAirPollutionHistory;
 
 const style = StyleSheet.create({
   imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: "20%",
-    paddingBottom: "10%"
+    paddingBottom: "10%",
   },
 });

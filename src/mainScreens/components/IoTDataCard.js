@@ -3,35 +3,24 @@ import { View, Text, StyleSheet, Dimensions } from "react-native";
 import COLORS from "../../consts/colors";
 const { width } = Dimensions.get("screen");
 
-const CityDataCard = ({ selectedCityData }) => {
+const IoTDataCard = ({ selectedCityData }) => {
   const renderItem = (item) => {
     const formattedDate = new Date(item.timestamp).toLocaleString();
     console.log("items: ", item);
-
-    const diseases = [];
-    if (item.copdStat) diseases.push("COPD");
-    if (item.asthmaStat) diseases.push("Asthma");
-    if (item.bronchitisStat) diseases.push("Bronchitis");
-    if (item.lungCancerStat) diseases.push("Lung Cancer");
 
     return (
       <View style={styles.card} key={item._id}>
         {/* <Text style={styles.title}>{item.city}</Text> */}
         <Text style={styles.info}>Time: {formattedDate}</Text>
         <Text style={styles.info}>
-          Average CO2 Level: {item.averageCO2Level?.toFixed(2)} ppm
+          CO2 Level: {item.co2Level?.toFixed(2)} ppm
         </Text>
         <Text style={styles.info}>
-          Average NO2 Level: {item.averageNO2Level?.toFixed(2)} ppm
+          NO2 Level: {item.no2Level?.toFixed(2)} ppm
         </Text>
         <Text style={styles.info}>
-          Average CH4 Level: {item.averageCH4Level.toFixed(2)} ppm
+          CH4 Level: {item.ch4Level.toFixed(2)} ppm
         </Text>
-        {diseases.length > 0 && (
-          <Text style={styles.diseaseInfo}>
-            Diseases: {diseases.join(", ")}
-          </Text>
-        )}
       </View>
     );
   };
@@ -79,4 +68,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CityDataCard;
+export default IoTDataCard;

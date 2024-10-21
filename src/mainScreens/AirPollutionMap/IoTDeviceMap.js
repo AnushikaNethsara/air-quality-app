@@ -203,7 +203,7 @@ const IoTDeviceMap = ({ navigation }) => {
                 onPress={() => {
                   setModalVisible(false);
                   navigation.navigate("IoTDeviceHistroyScreen", {
-                    mapData: selectedData,
+                    iotId: selectedData.id,
                   });
                 }}
                 style={style.zoomButton2}
