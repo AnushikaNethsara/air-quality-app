@@ -7,61 +7,62 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../consts/colors";
 import constants from "../consts/constants";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import user from "../assets/user.png";
 const { width } = Dimensions.get("screen");
 
-
 const card = width;
 
 const Profile = ({ navigation }) => {
-
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState("");
   const [userDetails, setUserDeatils] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetchData");
-      const userData = await AsyncStorage.getItem('userData');
+      const userData = await AsyncStorage.getItem("userData");
       const parsedData = JSON.parse(userData);
-      console.log(parsedData);
       setUserDeatils(parsedData);
     };
 
     fetchData();
-
   }, []);
-
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.backgroundColor, flex: 1 }}>
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.header2}></View>
-          <Image
-            style={styles.avatar}
-            source={user}
-          />
+          <Image style={styles.avatar} source={user} />
           <View style={styles.body}>
             {/* <Text style={styles.logout}>Sign out</Text> */}
             <View style={styles.bodyContent}>
               {/* <Text style={styles.name}>Name</Text>
               <Text style={styles.info}>Email</Text> */}
-              <Text style={styles.description}>First Name :{" "} {userDetails.firstname ? userDetails.firstname : "-"}</Text>
-              <Text style={styles.description}>Last Name :{" "} {userDetails.lastname ? userDetails.lastname : "-"}</Text>
-              <Text style={styles.description}>Email:{" "}{userDetails.email ? userDetails.email : "-"}</Text>
-              <TouchableOpacity onPress={() => {
-                navigation.navigate("BoardScreen");
-                AsyncStorage.clear();
-              }} style={styles.buttonContainer}>
+              <Text style={styles.description}>
+                First Name :{" "}
+                {userDetails.firstname ? userDetails.firstname : "-"}
+              </Text>
+              <Text style={styles.description}>
+                Last Name : {userDetails.lastname ? userDetails.lastname : "-"}
+              </Text>
+              <Text style={styles.description}>
+                Email: {userDetails.email ? userDetails.email : "-"}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("BoardScreen");
+                  AsyncStorage.clear();
+                }}
+                style={styles.buttonContainer}
+              >
                 <Text
                   style={{
                     color: COLORS.white,
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: "#696969",
     fontWeight: "600",
-    textAlign: "center"
+    textAlign: "center",
   },
   info: {
     fontSize: 16,
@@ -154,14 +155,14 @@ const styles = StyleSheet.create({
     width: 150,
     borderRadius: 40,
     backgroundColor: COLORS.pink,
-    color: COLORS.white
+    color: COLORS.white,
   },
   logout: {
-    textAlign: 'right',
+    textAlign: "right",
     padding: 5,
     marginRight: 5,
     marginTop: -30,
-  }
+  },
 });
 
 export default Profile;

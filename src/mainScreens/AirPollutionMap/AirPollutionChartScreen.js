@@ -28,14 +28,10 @@ const { width } = Dimensions.get("screen");
 const AirPollutionChartScreen = ({ route, navigation }) => {
   const isFocus = useIsFocused();
   const { city } = route.params;
-  console.log("city come");
-  console.log(city);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCityData, setSelectedCityData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetchData");
-
       try {
         setIsLoading(true);
         const response = await axios.get(
@@ -45,7 +41,6 @@ const AirPollutionChartScreen = ({ route, navigation }) => {
           (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
         );
         const latest10 = sortedData.slice(0, 10);
-        console.log(latest10);
         setSelectedCityData(latest10);
         setIsLoading(false);
       } catch (err) {

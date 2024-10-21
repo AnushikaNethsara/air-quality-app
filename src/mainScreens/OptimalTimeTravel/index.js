@@ -79,9 +79,6 @@ const OptimalTimeTravel = ({ navigation }) => {
 
     const end_date = `${endYear}-${endMonth}-${endDay}T${endHours}:${endMinutes}:${endSeconds}`;
 
-    console.log("Start date:", start_date);
-    console.log("End date:", end_date);
-
     try {
       const response = await axios.post(
         constants.backend_url + "/prediction/lowest-co2-hour",
@@ -90,7 +87,6 @@ const OptimalTimeTravel = ({ navigation }) => {
           end_date,
         }
       );
-      console.log(response.data);
       setIsLoading(false);
       setResult(response?.data?.prediction);
     } catch (error) {

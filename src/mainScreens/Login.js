@@ -43,10 +43,7 @@ const Login = ({ navigation }) => {
   const onSubmit = async () => {
     try {
       setError("");
-      console.log("degug-1 ");
-      console.log(constants.backend_url + "/users/login");
       if (!validateForm()) return;
-      console.log("degug-3");
       const loginRes = await axios.post(
         constants.backend_url + "/users/login",
         {
@@ -54,8 +51,6 @@ const Login = ({ navigation }) => {
           password,
         }
       );
-      console.log("degug-2 ");
-      console.log("\n\n\nloginRes: ", loginRes.data);
       if (loginRes.data.token) {
         storeUserData(loginRes.data.token, loginRes.data.user);
         navigation.navigate("Home");
@@ -71,8 +66,6 @@ const Login = ({ navigation }) => {
       await AsyncStorage.setItem("userId", JSON.stringify(allData._id));
       await AsyncStorage.setItem("userData", JSON.stringify(allData));
     } catch (error) {
-      console.log("***login***");
-      console.log(error);
       Alert.alert("Alert", "Something went wrong when login!", [
         {
           text: "Cancel",

@@ -52,8 +52,7 @@ const IoTDeviceMap = ({ navigation }) => {
       no2Level,
       co2Level,
     } = data;
-    // console.log("mqtt");
-    // console.log(data);
+
     const newMarker = {
       id: iotDeviceId,
       title: iotDeviceId,
@@ -78,7 +77,6 @@ const IoTDeviceMap = ({ navigation }) => {
     });
   }
   useEffect(() => {
-    console.log("\n\neffect");
     if (!client.isConnected()) {
       client.connect({
         onSuccess: () => {
@@ -87,7 +85,6 @@ const IoTDeviceMap = ({ navigation }) => {
           client.onMessageArrived = onMessage;
         },
         onFailure: (e) => {
-          console.log("Failed to connect!");
           console.log(e);
         },
       });

@@ -35,53 +35,40 @@ const AirPollutionLocationMap = ({ navigation }) => {
 
   const [selectedCityData, setSelectedCityData] = useState([]);
 
-
   const [region, setRegion] = useState({
     latitude: 6.9271,
     longitude: 79.8612,
     latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421
+    longitudeDelta: 0.0421,
   });
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(constants.backend_url + "/levels/a-city-history/Thalwatta");
-  //       console.log("\n\n\nresponse: ty");
-  //       console.log(response.data);
-  //       setSelectedCityData(response.data[0]);
-  //     } catch (err) {
-  //       setError(err);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [selectedLocation]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        console.log(constants.backend_url + "/levels/active-city-levels");
-        const response = await axios.get(constants.backend_url + "/levels/active-city-levels");
-        console.log("\n\n\n#####air pollution location map");
-        console.log(response.data);
+        const response = await axios.get(
+          constants.backend_url + "/levels/active-city-levels"
+        );
 
-        setLocations(response.data.map((location, index) => ({
-          id: index + 1,
-          title: location.city,
-          description: `${location.city} Area`,
-          coordinate: {
-            latitude: location?.gpsLatitude ? location?.gpsLatitude : defaultCoordinate.latitude,
-            longitude: location?.gpsLongitude ? location?.gpsLongitude : defaultCoordinate.longitude
-          },
-          // coordinate: { latitude: location?.gpsLatitude, longitude: location?.gpsLongitude },
-          radius: 500,
-          data: location,
-        })));
+        setLocations(
+          response.data.map((location, index) => ({
+            id: index + 1,
+            title: location.city,
+            description: `${location.city} Area`,
+            coordinate: {
+              latitude: location?.gpsLatitude
+                ? location?.gpsLatitude
+                : defaultCoordinate.latitude,
+              longitude: location?.gpsLongitude
+                ? location?.gpsLongitude
+                : defaultCoordinate.longitude,
+            },
+            // coordinate: { latitude: location?.gpsLatitude, longitude: location?.gpsLongitude },
+            radius: 500,
+            data: location,
+          }))
+        );
       } catch (err) {
-        console.log("err");
-        console.log(err);
         setError(err);
       } finally {
         setLoading(false);
@@ -94,7 +81,12 @@ const AirPollutionLocationMap = ({ navigation }) => {
   const handleCirclePress = (location) => {
     setSelectedLocation(location);
     setModalVisible(true);
-    const getMoreData = getAirQualityInterpretation(location.data.averageSO2Level, location.data.averageNO2Level, 0, location.data.averageCO2Level)
+    const getMoreData = getAirQualityInterpretation(
+      location.data.averageSO2Level,
+      location.data.averageNO2Level,
+      0,
+      location.data.averageCO2Level
+    );
     setMoreData(getMoreData);
   };
 
@@ -115,19 +107,18 @@ const AirPollutionLocationMap = ({ navigation }) => {
   };
 
   const viewEducationalContent = (data) => {
-    console.log("viewEducationalContent");
-    console.log(moreData);
-    setModalVisible(false)
+    setModalVisible(false);
     if (moreData)
-      navigation.navigate("AirPollutionEducationalScreen", { data: moreData?.insights });
-  }
+      navigation.navigate("AirPollutionEducationalScreen", {
+        data: moreData?.insights,
+      });
+  };
 
   const legends = [
-    { color: 'red', label: 'Hazardous' },
-    { color: 'yellow', label: 'Moderate' },
-    { color: 'green', label: 'Good' },
+    { color: "red", label: "Hazardous" },
+    { color: "yellow", label: "Moderate" },
+    { color: "green", label: "Good" },
   ];
-
 
   return (
     <View style={{ backgroundColor: COLORS.backgroundColor, height: "100%" }}>
@@ -147,8 +138,11 @@ const AirPollutionLocationMap = ({ navigation }) => {
                 location.data.averageCO2Level
               );
 
-              if (!location.coordinate || !location.coordinate.latitude || !location.coordinate.longitude) {
-
+              if (
+                !location.coordinate ||
+                !location.coordinate.latitude ||
+                !location.coordinate.longitude
+              ) {
                 return null;
               }
 
@@ -171,7 +165,6 @@ const AirPollutionLocationMap = ({ navigation }) => {
                 </React.Fragment>
               );
             })}
-
           </MapView>
         </View>
         <View style={style.ledContainer}>
@@ -206,14 +199,19 @@ const AirPollutionLocationMap = ({ navigation }) => {
                   </View>
                   <View style={style.dataRow}>
                     <Text style={style.boldText}>Location: </Text>
-                    <Text style={style.modalText}>{selectedLocation.data.city}</Text>
+                    <Text style={style.modalText}>
+                      {selectedLocation.data.city}
+                    </Text>
                   </View>
                   <View style={{ textAlign: "left" }}>
                     {/* <View style={{ marginBottom: 20 }}>
                       <Text style={style.boldText}>CH4 Level:  {selectedLocation.data.averageCH4Level.toFixed(2)} </Text>
                     </View> */}
                     <View style={{ marginBottom: 20 }}>
-                      <Text style={style.boldText}>CO2 Level: {selectedLocation.data.averageCO2Level.toFixed(2)} </Text>
+                      <Text style={style.boldText}>
+                        CO2 Level:{" "}
+                        {selectedLocation.data.averageCO2Level.toFixed(2)}{" "}
+                      </Text>
                       <Text style={style.modalText}>
                         {moreData?.co2?.description}
                       </Text>
@@ -224,17 +222,25 @@ const AirPollutionLocationMap = ({ navigation }) => {
                         style={[
                           style.muted,
                           {
-                            color: moreData?.co2?.interpretation === "Good" ? "green" :
-                              moreData?.co2?.interpretation === "Moderate" ? "yellow" :
-                                moreData?.co2?.interpretation === "Hazardous" ? "red" : "black"
-                          }
+                            color:
+                              moreData?.co2?.interpretation === "Good"
+                                ? "green"
+                                : moreData?.co2?.interpretation === "Moderate"
+                                ? "yellow"
+                                : moreData?.co2?.interpretation === "Hazardous"
+                                ? "red"
+                                : "black",
+                          },
                         ]}
                       >
                         {moreData?.co2?.interpretation}
                       </Text>
                     </View>
                     <View style={{ marginBottom: 20 }}>
-                      <Text style={style.boldText}>NO2 Level: {selectedLocation.data.averageNO2Level.toFixed(2)} </Text>
+                      <Text style={style.boldText}>
+                        NO2 Level:{" "}
+                        {selectedLocation.data.averageNO2Level.toFixed(2)}{" "}
+                      </Text>
                       <Text style={style.modalText}>
                         {moreData?.no2?.description}
                       </Text>
@@ -245,10 +251,15 @@ const AirPollutionLocationMap = ({ navigation }) => {
                         style={[
                           style.muted,
                           {
-                            color: moreData?.no2?.interpretation === "Good" ? "green" :
-                              moreData?.no2?.interpretation === "Moderate" ? "yellow" :
-                                moreData?.no2?.interpretation === "Hazardous" ? "red" : "black"
-                          }
+                            color:
+                              moreData?.no2?.interpretation === "Good"
+                                ? "green"
+                                : moreData?.no2?.interpretation === "Moderate"
+                                ? "yellow"
+                                : moreData?.no2?.interpretation === "Hazardous"
+                                ? "red"
+                                : "black",
+                          },
                         ]}
                       >
                         {moreData?.no2?.interpretation}
@@ -276,10 +287,9 @@ const AirPollutionLocationMap = ({ navigation }) => {
                 onPress={() => {
                   setModalVisible(false);
                   navigation.navigate("AirPollutionChartScreen", {
-                    city: selectedLocation.data.city
+                    city: selectedLocation.data.city,
                   });
-                }
-                }
+                }}
               >
                 <Text style={style.zoomButtonText}>View History</Text>
               </TouchableOpacity>
@@ -292,7 +302,6 @@ const AirPollutionLocationMap = ({ navigation }) => {
             </View>
           </View>
         </Modal>
-
       </ScrollView>
     </View>
   );
@@ -377,7 +386,7 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 25,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     paddingTop: 10,
     paddingBottom: 10,
     color: COLORS.darkGreen,
@@ -392,12 +401,12 @@ const style = StyleSheet.create({
     paddingLeft: 10,
   },
   ledContainer: {
-    flexDirection: 'column',
+    flexDirection: "column",
     padding: 20,
   },
   legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 10,
   },
   colorBox: {
@@ -408,6 +417,6 @@ const style = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
 });

@@ -54,11 +54,6 @@ const Register = ({ navigation }) => {
 
   const data = [{ key: "1", value: "Jammu & Kashmir" }];
 
-  console.log("\n\n=======");
-  console.log("expoPushToken: ", expoPushToken);
-  console.log("pushNotificationError: ", pushNotificationError);
-  console.log("=======\n\n");
-
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
@@ -132,18 +127,13 @@ const Register = ({ navigation }) => {
       heartDisease: selectedHeart === "1" ? true : false,
       token: expoPushToken,
     };
-    console.log("\n\n===================");
-    console.log(newUser);
-    console.log("===================\n\n");
     try {
-      console.log("de-1");
       setError("");
       if (!validateForm()) return;
       const loginRes = await axios.post(
         constants.backend_url + "/users/register",
         newUser
       );
-      console.log(loginRes);
       if (loginRes.status === 201) {
         setError("User Created Successfully!");
         setTimeout(() => {
@@ -151,7 +141,6 @@ const Register = ({ navigation }) => {
         }, 3000);
       } else setError("Something went wrong!");
     } catch (err) {
-      console.log(err);
       setError("Something went wrong!");
     }
   };

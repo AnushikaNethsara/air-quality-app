@@ -5,28 +5,32 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
-import Dropdown from '../components/Dropdown';
+import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
+import Dropdown from "../components/Dropdown";
 import Header from "../components/Header";
 import SubmitButton from "../components/SubmitButton";
 import COLORS from "../../consts/colors";
-import { extractCitiesAndDistance, formatRoutes, processRoutes } from "../../utils/Util";
+import {
+  extractCitiesAndDistance,
+  formatRoutes,
+  processRoutes,
+} from "../../utils/Util";
 import { useDistanceMatrix } from "./routesUtills";
 import constants from "../../consts/constants";
 import axios from "axios";
-import Geocoder from 'react-native-geocoding';
+import Geocoder from "react-native-geocoding";
 import { useShortestRoute } from "./hooks/useShortestRoute";
 import { FlatList } from "react-native-gesture-handler";
 
 const { width } = Dimensions.get("screen");
 
-const API_KEY = 'AIzaSyDIYIuHr5wE3xmW7MdSDh6Y_TfXR4xUxdU';
+const API_KEY = "AIzaSyDIYIuHr5wE3xmW7MdSDh6Y_TfXR4xUxdU";
 
 const ShortestRoute = ({ navigation }) => {
-  const [startLocation, setStartLocation] = useState('');
-  const [endLocation, setEndLocation] = useState('');
+  const [startLocation, setStartLocation] = useState("");
+  const [endLocation, setEndLocation] = useState("");
   const [startSuggestions, setStartSuggestions] = useState([]);
   const [endSuggestions, setEndSuggestions] = useState([]);
   const [routes, setRoutes] = useState([]);
@@ -38,13 +42,19 @@ const ShortestRoute = ({ navigation }) => {
     latitude: 6.9271,
     longitude: 79.8612,
     latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421
+    longitudeDelta: 0.0421,
   });
   Geocoder.init(API_KEY);
 
-  const fetchLocationSuggestions = async (input, setLocation, setSuggestions) => {
+  const fetchLocationSuggestions = async (
+    input,
+    setLocation,
+    setSuggestions
+  ) => {
     try {
-      const response = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`);
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`
+      );
       const json = await response.json();
       setSuggestions(json.predictions);
     } catch (err) {
@@ -55,8 +65,10 @@ const ShortestRoute = ({ navigation }) => {
 
   const fetchCoordinates = async (location, setCoords) => {
     try {
-      const API_KEY = 'AIzaSyDIYIuHr5wE3xmW7MdSDh6Y_TfXR4xUxdU'; // Replace with your Google Places API key
-      const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${API_KEY}`);
+      const API_KEY = "AIzaSyDIYIuHr5wE3xmW7MdSDh6Y_TfXR4xUxdU"; // Replace with your Google Places API key
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${API_KEY}`
+      );
       const json = await response.json();
       if (json.results && json.results.length > 0) {
         const coords = json.results[0].geometry.location;
@@ -70,7 +82,6 @@ const ShortestRoute = ({ navigation }) => {
     }
   };
 
-
   const handleStartLocationChange = (text) => {
     setStartLocation(text);
     fetchLocationSuggestions(text, setStartLocation, setStartSuggestions);
@@ -81,7 +92,12 @@ const ShortestRoute = ({ navigation }) => {
     fetchLocationSuggestions(text, setEndLocation, setEndSuggestions);
   };
 
-  const selectLocation = async (location, setLocation, setCoords, setSuggestions) => {
+  const selectLocation = async (
+    location,
+    setLocation,
+    setCoords,
+    setSuggestions
+  ) => {
     setLocation(location);
     setSuggestions([]);
     await fetchCoordinates(location, setCoords);
@@ -103,18 +119,21 @@ const ShortestRoute = ({ navigation }) => {
     }));
   };
 
-  const { distanceMatrix, loading } = useDistanceMatrix(startLocation, endLocation);
+  const { distanceMatrix, loading } = useDistanceMatrix(
+    startLocation,
+    endLocation
+  );
 
-  console.log("distanceMatrix");
   console.log(distanceMatrix);
 
   const handleSubmit = async () => {
-    console.log("handleSubmit");
     try {
       ///route/shortest-distance-route
-      setIsLoading(true)
-      const response = await axios.post(constants.backend_url + "/route/shortest-distance-route", { routes: distanceMatrix });
-      console.log("\n\n\nserver data");
+      setIsLoading(true);
+      const response = await axios.post(
+        constants.backend_url + "/route/shortest-distance-route",
+        { routes: distanceMatrix }
+      );
       const getRoutes = response?.data?.route?.path;
       if (getRoutes) {
         if (getRoutes[getRoutes.length - 1] !== endLocation) {
@@ -122,13 +141,12 @@ const ShortestRoute = ({ navigation }) => {
         }
         setRoutes(getRoutes);
       }
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       console.log("handleSubmit error: ", error);
-      Alert("Somthing went wrong please try again later")
+      Alert("Somthing went wrong please try again later");
     }
-
   };
 
   const { coordinates, routeCoordinates } = useShortestRoute(routes);
@@ -148,37 +166,55 @@ const ShortestRoute = ({ navigation }) => {
           value={startLocation}
           onChangeText={handleStartLocationChange}
           data={startSuggestions}
-          onSelect={(description) => selectLocation(description, setStartLocation, setStartCoords, setStartSuggestions)}
+          onSelect={(description) =>
+            selectLocation(
+              description,
+              setStartLocation,
+              setStartCoords,
+              setStartSuggestions
+            )
+          }
         />
         <Dropdown
           label="End Location"
           value={endLocation}
           onChangeText={handleEndLocationChange}
           data={endSuggestions}
-          onSelect={(description) => selectLocation(description, setEndLocation, setEndCoords, setEndSuggestions)}
+          onSelect={(description) =>
+            selectLocation(
+              description,
+              setEndLocation,
+              setEndCoords,
+              setEndSuggestions
+            )
+          }
         />
-        <Text style={{
-          textAlign: "center",
-          marginTop: 15,
-          marginBottom: "5%",
-          color: "#880000"
-        }}>
+        <Text
+          style={{
+            textAlign: "center",
+            marginTop: 15,
+            marginBottom: "5%",
+            color: "#880000",
+          }}
+        >
           {error}
         </Text>
         <View style={{ marginTop: -40 }}>
-          <SubmitButton onSubmit={handleSubmit} title={"Check"} isLoading={isLoading || loading} />
+          <SubmitButton
+            onSubmit={handleSubmit}
+            title={"Check"}
+            isLoading={isLoading || loading}
+          />
         </View>
-        {
-          routes && (
-            <View style={style.container}>
-              <FlatList
-                data={routes}
-                renderItem={renderCity}
-                keyExtractor={item => item.id}
-              />
-            </View>
-          )
-        }
+        {routes && (
+          <View style={style.container}>
+            <FlatList
+              data={routes}
+              renderItem={renderCity}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
+        )}
 
         {startCoords && endCoords && (
           <View style={style.container}>
@@ -222,7 +258,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 30,
-    marginBottom: 50
+    marginBottom: 50,
   },
   map: {
     width: width / 1.2,
@@ -251,26 +287,26 @@ const style = StyleSheet.create({
   },
   header: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   cityContainer: {
     padding: 20,
     marginVertical: 8,
     backgroundColor: COLORS.backgroundColor,
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
-    alignItems: 'center',
+    alignItems: "center",
   },
   cityName: {
     fontSize: 18,
     color: COLORS.lightBlue,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 });
