@@ -396,7 +396,7 @@ const style = StyleSheet.create({
   radioInput: {
     flexDirection: "column",
     alignItems: "flex-start",
-    marginHorizontal: 55,
+    marginLeft: 55,
     marginTop: 20,
     paddingHorizontal: 10,
     paddingVertical: 2,

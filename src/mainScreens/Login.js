@@ -17,6 +17,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CommonTextInput from "./components/CommonTextInput";
 
+const { width } = Dimensions.get("window");
+
 const Login = ({ navigation }) => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
@@ -134,13 +136,7 @@ const Login = ({ navigation }) => {
         />
         <TouchableOpacity onPress={onSubmit}>
           <View style={style.loginButton}>
-            <Text
-              style={{
-                color: "white",
-              }}
-            >
-              Login
-            </Text>
+            <Text style={style.buttonText}>Login</Text>
           </View>
         </TouchableOpacity>
 
@@ -186,13 +182,17 @@ const style = StyleSheet.create({
     paddingVertical: 2,
   },
   loginButton: {
-    marginHorizontal: 55,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 30,
     backgroundColor: COLORS.pink,
     paddingVertical: 15,
     borderRadius: 40,
+    marginHorizontal: 55,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
   },
   paragrapgh: {
     marginHorizontal: 55,

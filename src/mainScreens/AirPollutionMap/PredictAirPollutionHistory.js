@@ -43,7 +43,11 @@ const PredictAirPollutionHistory = ({ navigation }) => {
             "/prediction/air-pollution-predictions/" +
             userId
         );
-        console.log(response.data);
+        console.log(
+          constants.backend_url +
+            "/prediction/air-pollution-predictions/" +
+            userId
+        );
 
         setResult(response.data);
       } catch (err) {

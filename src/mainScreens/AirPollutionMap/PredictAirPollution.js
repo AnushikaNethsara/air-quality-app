@@ -118,7 +118,7 @@ const PredictAirPollution = ({ navigation }) => {
         constants.backend_url + "/prediction/predict-air-pollution",
         data
       );
-      // console.log(response.data);
+      console.log(response.data);
       setResult(response?.data);
       setIsLoading(false);
     } catch (error) {
