@@ -10,10 +10,10 @@ import {
   Picker,
   Platform,
   KeyboardAvoidingView,
-  Dimensions
+  Dimensions,
 } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Location from 'expo-location';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Location from "expo-location";
 import COLORS from "../../consts/colors";
 import constants from "../../consts/constants";
 import axios from "axios";
@@ -22,9 +22,7 @@ import Header from "../components/Header";
 import SubmitButton from "../components/SubmitButton";
 import AirPollutionResultCard from "../components/AirPollutionResultCard";
 
-
 const { width } = Dimensions.get("screen");
-
 
 const PredictAirPollution = ({ navigation }) => {
   const [co2Level, setCo2Level] = useState("");
@@ -40,7 +38,7 @@ const PredictAirPollution = ({ navigation }) => {
 
   const validateForm = () => {
     let isValid = true;
-    let errorMessage = ""
+    let errorMessage = "";
 
     if (co2Level.trim() === "") {
       errorMessage = "Co2 Level is required. ";
@@ -58,14 +56,14 @@ const PredictAirPollution = ({ navigation }) => {
     }
     setError(errorMessage);
     return isValid;
-  }
+  };
 
   useEffect(() => {
     (async () => {
       // Request permissions to access the location
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission to access location was denied');
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
         return;
       }
 
@@ -77,55 +75,64 @@ const PredictAirPollution = ({ navigation }) => {
     })();
   }, []);
 
-
   const handleShowHistory = async () => {
     navigation.navigate("PredictAirPollutionHistory");
-  }
+  };
   //  "userId":"66cad62b084a2c88ced066b0"
 
-  const handleSubmit = async () => {
-    setError(null)
-    if (!validateForm())
-      return;
-    setIsLoading(true);
-    const getUserId = await AsyncStorage.getItem('userId');
-    const userId = JSON.parse(getUserId)
-    //   6.949281
-    //  79.938273
-    const data = {
-      o3: o2Level,
-      co: co2Level,
-      so2: so2Level,
-      latitude: 6.949281,
-      longitude: 79.938273,
-      userId
+  const getCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.error("Permission to access location was denied");
+      return null;
     }
-    console.log(data);
 
-    console.log(constants.backend_url + "/prediction/predict-air-pollution",);
+    const { coords } = await Location.getCurrentPositionAsync({});
+    const { latitude, longitude } = coords;
+
+    return { latitude, longitude };
+  };
+
+  const handleSubmit = async () => {
+    setError(null);
+    // if (!validateForm())
+    //   return;
+    setIsLoading(true);
+    const getUserId = await AsyncStorage.getItem("userId");
+    const { latitude, longitude } = await getCurrentLocation();
+    const userId = JSON.parse(getUserId);
+    const data = {
+      latitude,
+      longitude,
+      userId,
+    };
+    console.log("\n\n=====");
+    console.log(data);
+    console.log("=====\n\n");
+
+    console.log(constants.backend_url + "/prediction/predict-air-pollution");
 
     try {
-      setMessage(null)
+      setMessage(null);
       const response = await axios.post(
         constants.backend_url + "/prediction/predict-air-pollution",
         data
       );
-      console.log(response.data);
+      // console.log(response.data);
       setResult(response?.data);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       console.log("error PredictAirPollution: ", error);
-      setMessage("No IoT Reading found in current location.")
+      setMessage("No IoT Reading found in current location.");
     }
-  }
-
+  };
 
   return (
     <View style={{ backgroundColor: COLORS.backgroundColor, height: "100%" }}>
       <ScrollView>
         <Header navigation={navigation} title={"Predict Air Pollution"} />
-        <KeyboardAvoidingView>
+        {/* <KeyboardAvoidingView>
           <TextInputWithLabel
             label="CO2 Level"
             iconName="user"
@@ -147,28 +154,39 @@ const PredictAirPollution = ({ navigation }) => {
             onChangeText={setSo2Level}
             secureTextEntry={false}
           />
-          <Text style={{
-            textAlign: "center",
-            marginTop: 15,
-            marginBottom: "5%",
-            color: "#880000"
-          }}>
+          <Text
+            style={{
+              textAlign: "center",
+              marginTop: 15,
+              marginBottom: "5%",
+              color: "#880000",
+            }}
+          >
             {error}
           </Text>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView> */}
 
-        <View style={{ marginTop: -50 }}>
-          <SubmitButton onSubmit={() => { handleSubmit() }} title={"Check"} isLoading={isLoading} />
+        <View style={{ marginTop: 10 }}>
+          <SubmitButton
+            onSubmit={() => {
+              handleSubmit();
+            }}
+            title={"Check"}
+            isLoading={isLoading}
+          />
         </View>
-        {
-          (result || message) && !isLoading && (
-            <View>
-              <AirPollutionResultCard result={result} message={message} />
-            </View>
-          )
-        }
+        {(result || message) && !isLoading && (
+          <View>
+            <AirPollutionResultCard result={result} message={message} />
+          </View>
+        )}
         <View style={{ flex: 1, alignItems: "center", marginTop: 20 }}>
-          <TouchableOpacity onPress={() => { handleShowHistory() }} style={{ marginBottom: 35 }}>
+          <TouchableOpacity
+            onPress={() => {
+              handleShowHistory();
+            }}
+            style={{ marginBottom: 35 }}
+          >
             <Text
               style={{
                 color: COLORS.lightBlue,
@@ -188,9 +206,9 @@ export default PredictAirPollution;
 
 const style = StyleSheet.create({
   imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: "20%",
-    paddingBottom: "10%"
+    paddingBottom: "10%",
   },
 });
