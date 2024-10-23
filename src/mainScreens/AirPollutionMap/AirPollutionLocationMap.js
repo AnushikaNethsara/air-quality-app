@@ -7,9 +7,10 @@ import {
   Dimensions,
   Modal,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import axios from "axios";
-import MapView, { Circle, Marker } from "react-native-maps";
+import MapView, { Circle, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Header from "../components/Header";
 import COLORS from "../../consts/colors";
 import constants from "../../consts/constants";
@@ -129,6 +130,7 @@ const AirPollutionLocationMap = ({ navigation }) => {
             region={region}
             onRegionChangeComplete={(region) => setRegion(region)}
             style={style.map}
+            provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
           >
             {locations.map((location) => {
               const currentLocationData = getAirQualityInterpretation(

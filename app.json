@@ -28,7 +28,12 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.anushika_nethsara.MobileApp",
-      "googleServicesFile":"./google-services.json"
+      "googleServicesFile":"./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyC3YAzGrnVF_SgpTy7KcNdvaKUjWbkmvEE"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

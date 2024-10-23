@@ -1,7 +1,31 @@
 import React from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import COLORS from "../../consts/colors";
+import { getAirQualityInterpretation } from "../../utils/Util";
 const { width } = Dimensions.get("screen");
+
+const QualityText = ({ interpretation }) => {
+  return (
+    <Text
+      style={[
+        styles.muted,
+        {
+          color:
+            interpretation === "Good"
+              ? "green"
+              : interpretation === "Moderate"
+              ? "yellow"
+              : interpretation === "Hazardous"
+              ? "red"
+              : "black",
+        },
+      ]}
+    >
+      {" "}
+      ({interpretation})
+    </Text>
+  );
+};
 
 const CityDataCard = ({ selectedCityData }) => {
   const renderItem = (item) => {
@@ -13,15 +37,27 @@ const CityDataCard = ({ selectedCityData }) => {
     if (item.bronchitisStat) diseases.push("Bronchitis");
     if (item.lungCancerStat) diseases.push("Lung Cancer");
 
+    const interpretations = getAirQualityInterpretation(
+      item.averageSO2Level,
+      item.averageNO2Level,
+      0,
+      item.averageCO2Level
+    );
+
+    console.log("\n\n\n=========interpretations");
+    console.log(interpretations.so2.interpretation);
+
     return (
       <View style={styles.card} key={item._id}>
         {/* <Text style={styles.title}>{item.city}</Text> */}
         <Text style={styles.info}>Time: {formattedDate}</Text>
         <Text style={styles.info}>
           Average CO2 Level: {item.averageCO2Level?.toFixed(2)} ppm
+          <QualityText interpretation={interpretations.co2.interpretation} />
         </Text>
         <Text style={styles.info}>
           Average NO2 Level: {item.averageNO2Level?.toFixed(2)} ppm
+          <QualityText interpretation={interpretations.no2.interpretation} />
         </Text>
         <Text style={styles.info}>
           Average CH4 Level: {item.averageCH4Level.toFixed(2)} ppm
@@ -75,6 +111,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 5,
     color: COLORS.darkGreen,
+  },
+  muted: {
+    fontSize: 16,
+    color: "#666",
   },
 });
 

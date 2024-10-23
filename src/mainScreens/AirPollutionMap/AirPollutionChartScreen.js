@@ -55,6 +55,7 @@ const AirPollutionChartScreen = ({ route, navigation }) => {
     <View style={{ backgroundColor: COLORS.backgroundColor, height: "100%" }}>
       <ScrollView>
         <Header navigation={navigation} title={"Air Pollution History"} />
+        <Text style={style.cityTitle}>{city}</Text>
         <View style={style.container}>
           {isLoading && <ActivityIndicator size="small" />}
           {!selectedCityData && (
@@ -81,7 +82,7 @@ const style = StyleSheet.create({
     flex: 1,
     marginHorizontal: 30,
     marginBottom: 50,
-    marginTop: 20,
+    marginTop: 10,
   },
   map: {
     width: width / 1.2,
@@ -154,5 +155,12 @@ const style = StyleSheet.create({
   muted: {
     fontSize: 16,
     color: "#666",
+  },
+  cityTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 5,
+    color: COLORS.darkGreen,
+    textAlign: "center",
   },
 });

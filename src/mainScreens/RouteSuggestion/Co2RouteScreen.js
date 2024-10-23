@@ -6,14 +6,18 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Alert
+  Alert,
 } from "react-native";
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
-import Dropdown from '../components/Dropdown';
+import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
+import Dropdown from "../components/Dropdown";
 import Header from "../components/Header";
 import SubmitButton from "../components/SubmitButton";
 import COLORS from "../../consts/colors";
-import { extractCitiesAndDistance, formatRoutes, processRoutes } from "../../utils/Util";
+import {
+  extractCitiesAndDistance,
+  formatRoutes,
+  processRoutes,
+} from "../../utils/Util";
 import { useDistanceMatrix } from "./routesUtills";
 import axios from "axios";
 import constants from "../../consts/constants";
@@ -23,8 +27,8 @@ import { FlatList } from "react-native-gesture-handler";
 const { width } = Dimensions.get("screen");
 
 const Co2RouteScreen = ({ navigation }) => {
-  const [startLocation, setStartLocation] = useState('');
-  const [endLocation, setEndLocation] = useState('');
+  const [startLocation, setStartLocation] = useState("");
+  const [endLocation, setEndLocation] = useState("");
   const [startSuggestions, setStartSuggestions] = useState([]);
   const [endSuggestions, setEndSuggestions] = useState([]);
   const [routes, setRoutes] = useState([]);
@@ -36,13 +40,19 @@ const Co2RouteScreen = ({ navigation }) => {
     latitude: 6.9271,
     longitude: 79.8612,
     latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421
+    longitudeDelta: 0.0421,
   });
 
-  const fetchLocationSuggestions = async (input, setLocation, setSuggestions) => {
+  const fetchLocationSuggestions = async (
+    input,
+    setLocation,
+    setSuggestions
+  ) => {
     try {
       const API_KEY = constants.map_api_key;
-      const response = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`);
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`
+      );
       const json = await response.json();
       setSuggestions(json.predictions);
     } catch (err) {
@@ -54,7 +64,9 @@ const Co2RouteScreen = ({ navigation }) => {
   const fetchCoordinates = async (location, setCoords) => {
     try {
       const API_KEY = constants.map_api_key;
-      const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${API_KEY}`);
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${API_KEY}`
+      );
       const json = await response.json();
       if (json.results && json.results.length > 0) {
         const coords = json.results[0].geometry.location;
@@ -67,6 +79,8 @@ const Co2RouteScreen = ({ navigation }) => {
       console.error(err);
     }
   };
+
+  console.log(routes);
 
   const fetchRoutes = async () => {
     try {
@@ -88,7 +102,6 @@ const Co2RouteScreen = ({ navigation }) => {
     }
   };
 
-
   const handleStartLocationChange = (text) => {
     setStartLocation(text);
     fetchLocationSuggestions(text, setStartLocation, setStartSuggestions);
@@ -102,7 +115,12 @@ const Co2RouteScreen = ({ navigation }) => {
     fetchLocationSuggestions(text, setEndLocation, setEndSuggestions);
   };
 
-  const selectLocation = async (location, setLocation, setCoords, setSuggestions) => {
+  const selectLocation = async (
+    location,
+    setLocation,
+    setCoords,
+    setSuggestions
+  ) => {
     setLocation(location);
     setSuggestions([]);
     await fetchCoordinates(location, setCoords);
@@ -124,20 +142,25 @@ const Co2RouteScreen = ({ navigation }) => {
     }));
   };
 
-  const { distanceMatrix, loading } = useDistanceMatrix(startLocation, endLocation);
-
+  const { distanceMatrix, loading } = useDistanceMatrix(
+    startLocation,
+    endLocation
+  );
 
   const removeDistances = (edges) => {
-    return edges.map(edge => edge.slice(0, 2));
-  }
+    return edges.map((edge) => edge.slice(0, 2));
+  };
 
   const handleSubmit = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       console.log("\n\nhandleSubmit");
       console.log(distanceMatrix);
-      const co2matrix = await removeDistances(distanceMatrix)
-      const response = await axios.post(constants.backend_url + "/route/optimal-co2-route", { routes: co2matrix });
+      const co2matrix = await removeDistances(distanceMatrix);
+      const response = await axios.post(
+        constants.backend_url + "/route/optimal-co2-route",
+        { routes: co2matrix }
+      );
       console.log("\n\n\nserver data");
       console.log(response.data);
       const getRoutes = response?.data?.route?.path;
@@ -147,20 +170,18 @@ const Co2RouteScreen = ({ navigation }) => {
         }
         setRoutes(getRoutes);
       }
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       console.log("handleSubmit error: ", error);
-      Alert("Somthing went wrong please try again later")
-
+      Alert("Somthing went wrong please try again later");
     }
-
   };
 
   const { coordinates, routeCoordinates } = useShortestRoute(routes);
 
-  const renderCity = ({ item }) => (
-    <TouchableOpacity style={style.cityContainer}>
+  const renderCity = ({ item, index }) => (
+    <TouchableOpacity style={style.cityContainer} key={index}>
       <Text style={style.cityName}>{item}</Text>
     </TouchableOpacity>
   );
@@ -174,37 +195,58 @@ const Co2RouteScreen = ({ navigation }) => {
           value={startLocation}
           onChangeText={handleStartLocationChange}
           data={startSuggestions}
-          onSelect={(description) => selectLocation(description, setStartLocation, setStartCoords, setStartSuggestions)}
+          onSelect={(description) =>
+            selectLocation(
+              description,
+              setStartLocation,
+              setStartCoords,
+              setStartSuggestions
+            )
+          }
         />
         <Dropdown
           label="End Location"
           value={endLocation}
           onChangeText={handleEndLocationChange}
           data={endSuggestions}
-          onSelect={(description) => selectLocation(description, setEndLocation, setEndCoords, setEndSuggestions)}
+          onSelect={(description) =>
+            selectLocation(
+              description,
+              setEndLocation,
+              setEndCoords,
+              setEndSuggestions
+            )
+          }
         />
-        <Text style={{
-          textAlign: "center",
-          marginTop: 15,
-          marginBottom: "5%",
-          color: "#880000"
-        }}>
+        <Text
+          style={{
+            textAlign: "center",
+            marginTop: 15,
+            marginBottom: "5%",
+            color: "#880000",
+          }}
+        >
           {error}
         </Text>
         <View style={{ marginTop: -40 }}>
-          <SubmitButton onSubmit={handleSubmit} title={"Check"} isLoading={isLoading || loading} />
+          <SubmitButton
+            onSubmit={handleSubmit}
+            title={"Check"}
+            isLoading={isLoading || loading}
+          />
         </View>
-        {
-          routes && (
-            <View style={style.container}>
-              <FlatList
-                data={routes}
-                renderItem={renderCity}
-                keyExtractor={item => item.id}
-              />
-            </View>
-          )
-        }
+        {routes && (
+          <View style={style.container}>
+            {routes.map((item, index) => {
+              renderCity(item, index);
+            })}
+            {/* <FlatList
+              data={routes}
+              renderItem={renderCity}
+              keyExtractor={(item) => item.id}
+            /> */}
+          </View>
+        )}
         {startCoords && endCoords && (
           <View style={style.container}>
             <MapView
@@ -247,7 +289,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 30,
-    marginBottom: 50
+    marginBottom: 50,
   },
   map: {
     width: width / 1.2,
@@ -276,26 +318,26 @@ const style = StyleSheet.create({
   },
   header: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   cityContainer: {
     padding: 20,
     marginVertical: 8,
     backgroundColor: COLORS.backgroundColor,
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
-    alignItems: 'center',
+    alignItems: "center",
   },
   cityName: {
     fontSize: 18,
     color: COLORS.lightBlue,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 });

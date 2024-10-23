@@ -1,6 +1,7 @@
 import axios from "axios";
+import constants from "../consts/constants";
 
-const googleMapsApiKey = "AIzaSyC3YAzGrnVF_SgpTy7KcNdvaKUjWbkmvEE";
+const googleMapsApiKey = constants.map_api_key;
 
 export async function getCityFromCoordinates(lat, lng) {
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${googleMapsApiKey}`;

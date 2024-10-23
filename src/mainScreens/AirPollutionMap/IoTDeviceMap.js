@@ -8,8 +8,9 @@ import {
   Modal,
   TouchableOpacity,
   Image,
+  Platform,
 } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Header from "../components/Header";
 import COLORS from "../../consts/colors";
 import Paho from "paho-mqtt";
@@ -138,6 +139,7 @@ const IoTDeviceMap = ({ navigation }) => {
             scrollEnabled={true}
             pitchEnabled={true}
             rotateEnabled={true}
+            provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
           >
             {markers.map((marker) => (
               <Marker
