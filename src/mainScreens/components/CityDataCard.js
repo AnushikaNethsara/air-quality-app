@@ -6,7 +6,6 @@ const { width } = Dimensions.get("screen");
 const CityDataCard = ({ selectedCityData }) => {
   const renderItem = (item) => {
     const formattedDate = new Date(item.timestamp).toLocaleString();
-    console.log("items: ", item);
 
     const diseases = [];
     if (item.copdStat) diseases.push("COPD");

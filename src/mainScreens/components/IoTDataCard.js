@@ -6,7 +6,6 @@ const { width } = Dimensions.get("screen");
 const IoTDataCard = ({ selectedCityData }) => {
   const renderItem = (item) => {
     const formattedDate = new Date(item.timestamp).toLocaleString();
-    console.log("items: ", item);
 
     return (
       <View style={styles.card} key={item._id}>

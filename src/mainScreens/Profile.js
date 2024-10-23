@@ -24,6 +24,7 @@ const Profile = ({ navigation }) => {
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState("");
   const [userDetails, setUserDeatils] = useState([]);
+  const [diseases, setDiseases] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +35,26 @@ const Profile = ({ navigation }) => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchDiseases = async () => {
+      const newDiseases = [];
+      if (!userDetails.copdStat) newDiseases.push("COPD");
+      if (!userDetails.asthmaStat) newDiseases.push("Asthma");
+      if (!userDetails.bronchitisStat) newDiseases.push("Bronchitis");
+      if (!userDetails.lungCancerStat) newDiseases.push("Lung Cancer");
+
+      setDiseases(newDiseases);
+    };
+
+    fetchDiseases();
+  }, [userDetails]);
+
+  console.log(userDetails);
+
+  console.log("\n\n\n==============");
+  console.log(diseases);
+  console.log("==============\n\n\n");
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.backgroundColor, flex: 1 }}>
@@ -56,6 +77,11 @@ const Profile = ({ navigation }) => {
               <Text style={styles.description}>
                 Email: {userDetails.email ? userDetails.email : "-"}
               </Text>
+              {diseases.length > 0 && (
+                <Text style={styles.description}>
+                  Diseases: {diseases.join(", ")}
+                </Text>
+              )}
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("BoardScreen");
