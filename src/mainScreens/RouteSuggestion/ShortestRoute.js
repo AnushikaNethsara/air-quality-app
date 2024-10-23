@@ -26,7 +26,7 @@ import { FlatList } from "react-native-gesture-handler";
 
 const { width } = Dimensions.get("screen");
 
-const API_KEY = "AIzaSyDIYIuHr5wE3xmW7MdSDh6Y_TfXR4xUxdU";
+const API_KEY = constants.map_api_key;
 
 const ShortestRoute = ({ navigation }) => {
   const [startLocation, setStartLocation] = useState("");
@@ -56,6 +56,7 @@ const ShortestRoute = ({ navigation }) => {
         `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`
       );
       const json = await response.json();
+      console.log("json: ", json);
       setSuggestions(json.predictions);
     } catch (err) {
       setError("Failed to fetch location suggestions");

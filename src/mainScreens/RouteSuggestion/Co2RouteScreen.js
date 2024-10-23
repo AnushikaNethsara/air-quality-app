@@ -26,12 +26,14 @@ import { FlatList } from "react-native-gesture-handler";
 
 const { width } = Dimensions.get("screen");
 
+const API_KEY = constants.map_api_key;
+
 const Co2RouteScreen = ({ navigation }) => {
   const [startLocation, setStartLocation] = useState("");
   const [endLocation, setEndLocation] = useState("");
   const [startSuggestions, setStartSuggestions] = useState([]);
   const [endSuggestions, setEndSuggestions] = useState([]);
-  const [routes, setRoutes] = useState([]);
+  const [routes, setRoutes] = useState([1, 2, 3, 4]);
   const [startCoords, setStartCoords] = useState(null);
   const [endCoords, setEndCoords] = useState(null);
   const [error, setError] = useState("");
@@ -49,7 +51,6 @@ const Co2RouteScreen = ({ navigation }) => {
     setSuggestions
   ) => {
     try {
-      const API_KEY = constants.map_api_key;
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`
       );
@@ -63,7 +64,6 @@ const Co2RouteScreen = ({ navigation }) => {
 
   const fetchCoordinates = async (location, setCoords) => {
     try {
-      const API_KEY = constants.map_api_key;
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${API_KEY}`
       );
@@ -86,7 +86,6 @@ const Co2RouteScreen = ({ navigation }) => {
     try {
       setIsLoading(true);
       setError("");
-      const API_KEY = constants.map_api_key;
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${startCoords.lat},${startCoords.lng}&destination=${endCoords.lat},${endCoords.lng}&alternatives=true&key=${API_KEY}`
       );
