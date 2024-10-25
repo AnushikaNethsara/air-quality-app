@@ -190,7 +190,7 @@ const ShortestRoute = ({ navigation }) => {
             )
           }
         />
-        <Text
+        {/* <Text
           style={{
             textAlign: "center",
             marginTop: 15,
@@ -199,8 +199,8 @@ const ShortestRoute = ({ navigation }) => {
           }}
         >
           {error}
-        </Text>
-        <View style={{ marginTop: -40 }}>
+        </Text> */}
+        <View style={{ marginTop: 10 }}>
           <SubmitButton
             onSubmit={handleSubmit}
             title={"Check"}

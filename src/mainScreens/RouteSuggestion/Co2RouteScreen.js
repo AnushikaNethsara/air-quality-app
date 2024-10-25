@@ -33,7 +33,7 @@ const Co2RouteScreen = ({ navigation }) => {
   const [endLocation, setEndLocation] = useState("");
   const [startSuggestions, setStartSuggestions] = useState([]);
   const [endSuggestions, setEndSuggestions] = useState([]);
-  const [routes, setRoutes] = useState([1, 2, 3, 4]);
+  const [routes, setRoutes] = useState([]);
   const [startCoords, setStartCoords] = useState(null);
   const [endCoords, setEndCoords] = useState(null);
   const [error, setError] = useState("");
@@ -147,7 +147,7 @@ const Co2RouteScreen = ({ navigation }) => {
   );
 
   const removeDistances = (edges) => {
-    return edges.map((edge) => edge.slice(0, 2));
+    return edges?.map((edge) => edge.slice(0, 2));
   };
 
   const handleSubmit = async () => {
@@ -156,6 +156,7 @@ const Co2RouteScreen = ({ navigation }) => {
       console.log("\n\nhandleSubmit");
       console.log(distanceMatrix);
       const co2matrix = await removeDistances(distanceMatrix);
+      console.log("==co2matrix: ", co2matrix);
       const response = await axios.post(
         constants.backend_url + "/route/optimal-co2-route",
         { routes: co2matrix }
@@ -180,7 +181,7 @@ const Co2RouteScreen = ({ navigation }) => {
   const { coordinates, routeCoordinates } = useShortestRoute(routes);
 
   console.log("routeCoordinates");
-  console.log(routeCoordinates);
+  console.log(routes);
 
   const renderCity = ({ item, index }) => (
     <TouchableOpacity style={style.cityContainer} key={index}>
