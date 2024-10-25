@@ -179,6 +179,9 @@ const Co2RouteScreen = ({ navigation }) => {
 
   const { coordinates, routeCoordinates } = useShortestRoute(routes);
 
+  console.log("routeCoordinates");
+  console.log(routeCoordinates);
+
   const renderCity = ({ item, index }) => (
     <TouchableOpacity style={style.cityContainer} key={index}>
       <Text style={style.cityName}>{item}</Text>

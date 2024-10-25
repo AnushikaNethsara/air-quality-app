@@ -14,6 +14,8 @@ const AirPollutionResultCard = ({ result, message }) => {
   const o3Value = result?.predictionInputs.inputs.o3[0];
   const so2Value = result?.predictionInputs.inputs.so2[0];
 
+  //no2, so2->co2, o3->ch4,
+
   const eduData = getAQICategory(pm25);
   return (
     <View style={styles.card}>
@@ -44,11 +46,11 @@ const AirPollutionResultCard = ({ result, message }) => {
             <Text style={styles.modalText}>{no2Value}</Text>
           </View>
           <View style={styles.dataRow}>
-            <Text style={styles.boldText}>O3: </Text>
+            <Text style={styles.boldText}>CH4: </Text>
             <Text style={styles.modalText}>{o3Value}</Text>
           </View>
           <View style={styles.dataRow}>
-            <Text style={styles.boldText}>SO2: </Text>
+            <Text style={styles.boldText}>CH4: </Text>
             <Text style={styles.modalText}>{so2Value}</Text>
           </View>
           {/* end air values */}
