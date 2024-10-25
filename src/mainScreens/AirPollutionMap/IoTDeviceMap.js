@@ -187,7 +187,7 @@ const IoTDeviceMap = ({ navigation }) => {
                     <Text style={style.modalText}>{selectedData.no2Level}</Text>
                   </View>
                   <View style={style.dataRow}>
-                    <Text style={style.boldText}>SO2 Level: </Text>
+                    <Text style={style.boldText}>CO2 Level: </Text>
                     <Text style={style.modalText}>{selectedData.co2Level}</Text>
                   </View>
                 </>
