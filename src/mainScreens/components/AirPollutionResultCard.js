@@ -50,7 +50,7 @@ const AirPollutionResultCard = ({ result, message }) => {
             <Text style={styles.modalText}>{o3Value}</Text>
           </View>
           <View style={styles.dataRow}>
-            <Text style={styles.boldText}>CH4: </Text>
+            <Text style={styles.boldText}>CO2: </Text>
             <Text style={styles.modalText}>{so2Value}</Text>
           </View>
           {/* end air values */}
