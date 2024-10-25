@@ -7,7 +7,7 @@ const AirPollutionResultCard = ({ result, message }) => {
   console.log("AirPollutionResultCard");
   console.log(result);
 
-  const pm25 = result?.prediction["pm_2.5"][0];
+  const pm25 = result?.prediction["pm_2_5"][0];
   const pm10 = result?.prediction["pm_10"][0];
   const coValue = result?.predictionInputs.inputs.co[0];
   const no2Value = result?.predictionInputs.inputs.no2[0];
