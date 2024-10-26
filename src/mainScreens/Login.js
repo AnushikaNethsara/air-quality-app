@@ -64,6 +64,9 @@ const Login = ({ navigation }) => {
   //*** get user details for store method***//
   const storeUserData = async (token, allData) => {
     try {
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("userId");
+      await AsyncStorage.removeItem("userData");
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("userId", JSON.stringify(allData._id));
       await AsyncStorage.setItem("userData", JSON.stringify(allData));

@@ -39,10 +39,13 @@ const Profile = ({ navigation }) => {
   useEffect(() => {
     const fetchDiseases = async () => {
       const newDiseases = [];
-      if (!userDetails.copdStat) newDiseases.push("COPD");
-      if (!userDetails.asthmaStat) newDiseases.push("Asthma");
-      if (!userDetails.bronchitisStat) newDiseases.push("Bronchitis");
-      if (!userDetails.lungCancerStat) newDiseases.push("Lung Cancer");
+      console.log(userDetails);
+
+      if (userDetails.copdStat) newDiseases.push("COPD");
+      if (userDetails.asthmaStat) newDiseases.push("Asthma");
+      if (userDetails.bronchitisStat) newDiseases.push("Bronchitis");
+      if (userDetails.lungCancerStat) newDiseases.push("Lung Cancer");
+      if (userDetails.heartDisease) newDiseases.push("Heart Disease");
 
       setDiseases(newDiseases);
     };
