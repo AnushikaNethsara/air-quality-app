@@ -41,10 +41,10 @@ const Profile = ({ navigation }) => {
       const newDiseases = [];
       console.log(userDetails);
 
-      if (userDetails.copdStat) newDiseases.push("COPD");
-      if (userDetails.asthmaStat) newDiseases.push("Asthma");
-      if (userDetails.bronchitisStat) newDiseases.push("Bronchitis");
-      if (userDetails.lungCancerStat) newDiseases.push("Lung Cancer");
+      if (userDetails.COPD) newDiseases.push("COPD");
+      if (userDetails.Asthma) newDiseases.push("Asthma");
+      if (userDetails.bronchitis) newDiseases.push("Bronchitis");
+      if (userDetails.lungCancer) newDiseases.push("Lung Cancer");
       if (userDetails.heartDisease) newDiseases.push("Heart Disease");
 
       setDiseases(newDiseases);
